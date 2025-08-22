@@ -1,7 +1,15 @@
 # go-media-devices-state
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/cakeholeDC/go-media-devices-state)](https://goreportcard.com/report/github.com/cakeholeDC/go-media-devices-state)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+This fork silences the native deprecation warnings, and adds a flag to silence the native logs.
+
+Example Usage:
+
+```go
+mediaDevices.IsCameraOn(true)      // prints native code debug to stdout
+mediaDevices.IsMicrophoneOn(false) // hides native code debug from stdout
+```
+---
+
 
 Go module to get camera/microphone state -- checks if camera/microphone is ON.
 
