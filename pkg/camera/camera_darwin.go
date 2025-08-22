@@ -6,16 +6,24 @@ package camera
 #cgo LDFLAGS: -framework AVFoundation
 #cgo LDFLAGS: -framework CoreMediaIO
 #include "camera_darwin.mm"
+void SetCameraDebugEnabled(int enabled);
 */
 import "C"
 import (
 	"fmt"
 
-	"github.com/antonfisher/go-media-devices-state/pkg/common"
+	"github.com/cakeholeDC/go-media-devices-state/pkg/common"
 )
 
 // IsCameraOn returns true is any camera in the system is ON
-func IsCameraOn() (bool, error) {
+func IsCameraOn(debug bool) (bool, error) {
+	// Set debug flag before calling the C function
+	if debug {
+		C.SetCameraDebugEnabled(1)
+	} else {
+		C.SetCameraDebugEnabled(0)
+	}
+
 	isCameraOn := C.int(0)
 	errCode := C.IsCameraOn(&isCameraOn)
 

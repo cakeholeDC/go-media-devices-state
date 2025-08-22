@@ -6,16 +6,24 @@ package microphone
 #cgo LDFLAGS: -framework AVFoundation
 #cgo LDFLAGS: -framework CoreAudio
 #include "microphone_darwin.mm"
+void SetMicrophoneDebugEnabled(int enabled);
 */
 import "C"
 import (
 	"fmt"
 
-	"github.com/antonfisher/go-media-devices-state/pkg/common"
+	"github.com/cakeholeDC/go-media-devices-state/pkg/common"
 )
 
 // IsMicrophoneOn returns true is any microphone in the system is ON
-func IsMicrophoneOn() (bool, error) {
+func IsMicrophoneOn(debug bool) (bool, error) {
+	// Set debug flag before calling the C function
+	if debug {
+		C.SetMicrophoneDebugEnabled(1)
+	} else {
+		C.SetMicrophoneDebugEnabled(0)
+	}
+
 	isMicrophoneOn := C.int(0)
 	errCode := C.IsMicrophoneOn(&isMicrophoneOn)
 
