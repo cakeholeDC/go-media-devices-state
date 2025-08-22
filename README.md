@@ -1,16 +1,26 @@
 # go-media-devices-state
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/antonfisher/go-media-devices-state)](https://goreportcard.com/report/github.com/antonfisher/go-media-devices-state)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+This fork silences the native deprecation warnings, and adds a flag to silence the native logs.
+
+Example Usage:
+
+```go
+mediaDevices.IsCameraOn(true)      // prints native code debug to stdout
+mediaDevices.IsMicrophoneOn(false) // hides native code debug from stdout
+```
+---
+
 
 Go module to get camera/microphone state -- checks if camera/microphone is ON.
 
 Module uses `cgo` to call native specific API on different platforms (currently only darwin is implemented.)
 
+**Note:** This module includes a debug parameter to control native code logging. Set to `true` to see detailed device information, or `false` for quiet operation. Deprecation warnings from system APIs have been silenced.
+
 ## Installation
 
 ```shell
-go get github.com/antonfisher/go-media-devices-state
+go get github.com/cakeholeDC/go-media-devices-state
 ```
 
 ## Usage
@@ -21,18 +31,20 @@ package main
 import (
 	"fmt"
 
-	mediaDevices "github.com/antonfisher/go-media-devices-state"
+	mediaDevices "github.com/cakeholeDC/go-media-devices-state"
 )
 
 func main() {
-	isCameraOn, err := mediaDevices.IsCameraOn()
+	// Check camera state with debug output enabled (prints native code debug to stdout)
+	isCameraOn, err := mediaDevices.IsCameraOn(true)
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
 		fmt.Println("Is camera on:", isCameraOn)
 	}
 
-	isMicrophoneOn, err := mediaDevices.IsMicrophoneOn()
+	// Check microphone state with debug output disabled (quiet operation)
+	isMicrophoneOn, err := mediaDevices.IsMicrophoneOn(false)
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else {
@@ -50,13 +62,15 @@ func main() {
 | windows  |       ☐        |         ☐          | ☐         |                                                                       |
 
 ```go
-// IsCameraOn returns true is any camera in the system is ON
-func IsCameraOn() (bool, error)
+// IsCameraOn returns true if any camera in the system is ON
+// The debug parameter controls whether native code debug output is printed to stdout
+func IsCameraOn(debug bool) (bool, error)
 
-// IsMicrophoneOn returns true is any microphone in the system is ON
-func IsMicrophoneOn() (bool, error)
+// IsMicrophoneOn returns true if any microphone in the system is ON
+// The debug parameter controls whether native code debug output is printed to stdout
+func IsMicrophoneOn(debug bool) (bool, error)
 
-// Debug calls all available device functions and prints the results
+// Debug calls all available device functions and prints the results (always with debug enabled)
 func Debug()
 ```
 
@@ -65,7 +79,7 @@ func Debug()
 Demo prints out all system video devices and their states (ON/OFF):
 
 ```shell
-git clone https://github.com/antonfisher/go-media-devices-state.git
+git clone https://github.com/cakeholeDC/go-media-devices-state.git
 cd go-media-devices-state
 go run -a cmd/demo.go
 ```
